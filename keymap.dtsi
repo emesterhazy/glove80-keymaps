@@ -38,25 +38,27 @@
 //#define OPERATING_SYSTEM 'W' // windows
 #endif
 #if OPERATING_SYSTEM == 'M'
-    #define _C      LG
-    #define _A_TAB  LGUI
-    #define _G_TAB  LALT
-    #define _REDO   _C(LS(Z))
-    #define _POWER  K_POWER
-    #define _W      LA
-    #define _HOME   _C(LEFT)
-    #define _END    _C(RIGHT)
-    #define _EMOJI  LG(LC(SPACE))
+    #define _C          LG
+    #define _A_TAB      LGUI
+    #define _G_TAB      LALT
+    #define _REDO       _C(LS(Z))
+    #define _POWER      K_POWER
+    #define _W          LA
+    #define _HOME       _C(LEFT)
+    #define _END        _C(RIGHT)
+    #define _BSPC_WORD  LA(BSPC)
+    #define _EMOJI      LG(LC(SPACE))
 #else
-    #define _C      LC
-    #define _A_TAB  LALT
-    #define _G_TAB  LGUI
-    #define _REDO   _C(Y)
-    #define _POWER  C_POWER
-    #define _W      _C
-    #define _HOME   HOME
-    #define _END    END
-    #define _EMOJI  LG(DOT)
+    #define _C          LC
+    #define _A_TAB      LALT
+    #define _G_TAB      LGUI
+    #define _REDO       _C(Y)
+    #define _POWER      C_POWER
+    #define _W          _C
+    #define _HOME       HOME
+    #define _END        END
+    #define _BSPC_WORD  LC(BSPC)
+    #define _EMOJI      LG(DOT)
 #endif
 #define _SLEEP      C_SLEEP
 #if OPERATING_SYSTEM == 'W'
@@ -978,6 +980,13 @@ combos {
         timeout-ms = <COMBO_FIRING_DECAY>;
         key-positions = <POS_RH_T1 POS_RH_C2R4>;
         bindings = <&caps_word>;
+        layers = <0 1 2 3 4 5 6 7 8>;
+    };
+
+    combo_backspace_word {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T4 POS_LH_C4R4>;
+        bindings = <&kp _BSPC_WORD>;
         layers = <0 1 2 3 4 5 6 7 8>;
     };
 
