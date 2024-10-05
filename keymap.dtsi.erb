@@ -73,13 +73,16 @@
     #define _HOME   HOME
     #define _END    END
 #endif
-#define _SLEEP      C_SLEEP
+#define _SLEEP         C_SLEEP
 #if OPERATING_SYSTEM == <%= OPERATING_SYSTEMS[:windows] %>
-    #define _LOCK   LG(L)
+    #define _LOCK      LG(L)
+    #define _BSPC_WORD LC(BSPC)
 #elif OPERATING_SYSTEM == <%= OPERATING_SYSTEMS[:macos] %>
-    #define _LOCK   _C(LC(Q))
+    #define _LOCK      _C(LC(Q))
+    #define _BSPC_WORD LA(BSPC)
 #elif OPERATING_SYSTEM == <%= OPERATING_SYSTEMS[:linux] %>
-    #define _LOCK   K_LOCK
+    #define _LOCK      K_LOCK
+    #define _BSPC_WORD LA(BSPC)
 #endif
 #define _UNDO       _C(Z)
 #define _CUT        _C(X)
@@ -313,6 +316,13 @@ combos {
         key-positions = <POS_RH_T1 POS_RH_C2R4>;
         bindings = <&caps_word>;
         layers = <<%= (0...ALPHA_LAYERS_COUNT).to_a.join(" ") %>>;
+    };
+
+    combo_backspace_word {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T4 POS_LH_C4R4>;
+        bindings = <&kp _BSPC_WORD>;
+        layers = <0 1 2 3 4 5 6 7 8>;
     };
 
 };
