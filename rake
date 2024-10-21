@@ -11,7 +11,7 @@ IMAGE=${PWD##*/}:$(git hash-object Dockerfile)
 # build the image if necessary
 docker images -q "$IMAGE" | grep -q . ||
   tar -cf- Dockerfile |
-    docker build -t "$IMAGE" -
+    docker build --network=host -t "$IMAGE" -
 
 # run rake(1) inside the image
 docker run --rm \
