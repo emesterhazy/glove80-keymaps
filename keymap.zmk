@@ -1,7 +1,6 @@
-
 /*
  * Copyright (c) 2020 The ZMK Contributors
- * Copyright (c) 2023 Innaworks Development Limited, trading as MoErgo
+ * Copyright (c) 2025 Innaworks Development Limited, trading as MoErgo
  *
  * SPDX-License-Identifier: MIT
  */
@@ -20,16 +19,57 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 
-/* Automatically generated layer name #define */
-#define LAYER_Engrammer 0
-#define LAYER_Engram 1
-#define LAYER_Dvorak 2
-#define LAYER_ColemakDHm 3
-#define LAYER_Colemak 4
-#define LAYER_QWERTY 5
-#define LAYER_Norman 6
-#define LAYER_Workman 7
-#define LAYER_Halmak 8
+/* On demand includes */
+
+
+/* Helper Macros, based on https://github.com/urob/zmk-helpers/ */
+
+#pragma once
+
+#define ZMK_HELPER_STRINGIFY(x) #x
+
+// Preprocessor mechanism to overload macros, cf. https://stackoverflow.com/a/27051616/6114651
+#define VARGS_(_10, _9, _8, _7, _6, _5, _4, _3, _2, _1, N, ...) N
+#define VARGS(...) VARGS_(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#define CONCAT_(a, b) a##b
+#define CONCAT(a, b) CONCAT_(a, b)
+
+#define ZMK_BEHAVIOR_CORE_tap_dance  \
+    compatible = "zmk,behavior-tap-dance"; \
+    #binding-cells = <0>
+
+#define ZMK_BEHAVIOR(name, type, ...) \
+    name: name { \
+        ZMK_BEHAVIOR_CORE_ ## type; \
+        __VA_ARGS__ \
+    };
+
+#define ZMK_TAP_DANCE(name, ...) \
+    ZMK_BEHAVIOR(name, tap_dance, __VA_ARGS__)
+
+#define ZMK_TD_LAYER(name, layer) \
+    ZMK_TAP_DANCE(name, \
+        tapping-term-ms = <200>; \
+        bindings = <&mo layer>, <&to layer>; \
+)
+
+/* Environment and metadata defines */
+#define KB_TYPE_GLOVE_80 1
+#define KB_TYPE_GO_60    2
+
+#define KB_TYPE          KB_TYPE_GLOVE_80
+#define EDITOR_HOST_OS   'M'
+
+/* Automatically generated layer name defines */
+#define LAYER_Colemak 0
+#define LAYER_ColemakCallum 1
+#define LAYER_ColemakDedicated 2
+#define LAYER_QWERTY 3
+#define LAYER_ColemakDHm 4
+#define LAYER_Engrammer 5
+#define LAYER_Engram 6
+#define LAYER_LeftCallum 7
+#define LAYER_RightCallum 8
 #define LAYER_Typing 9
 #define LAYER_LeftPinky 10
 #define LAYER_LeftRing1 11
@@ -62,19 +102,13 @@
 /* Custom Device-tree */
 
 
+/* Input Listeners */
 
-/* Glove80 system behavior & macros */
+
+/* System behavior and Macros */
 / {
     behaviors {
-        // For the "layer" key, it'd nice to be able to use it as either a shift or a toggle.
-        // Configure it as a tap dance, so the first tap (or hold) is a &mo and the second tap is a &to
-        lower: lower {
-            compatible = "zmk,behavior-tap-dance";
-            label = "LAYER_TAP_DANCE";
-            #binding-cells = <0>;
-            tapping-term-ms = <200>;
-            bindings = <&mo LAYER_Lower>, <&to LAYER_Lower>;
-        };
+        ZMK_TD_LAYER(lower, LAYER_Lower)
     };
 };
 
@@ -208,96 +242,124 @@
     };
 };
 
-/* #define for key positions */
+
+/* Key positions */
+
+#define POS_LH_C6R1 0
+#define POS_LH_C5R1 1
+#define POS_LH_C4R1 2
+#define POS_LH_C3R1 3
+#define POS_LH_C2R1 4
+#define POS_RH_C2R1 5
+#define POS_RH_C3R1 6
+#define POS_RH_C4R1 7
+#define POS_RH_C5R1 8
+#define POS_RH_C6R1 9
+#define POS_LH_C6R2 10
+#define POS_LH_C5R2 11
+#define POS_LH_C4R2 12
+#define POS_LH_C3R2 13
+#define POS_LH_C2R2 14
+#define POS_LH_C1R2 15
+#define POS_RH_C1R2 16
+#define POS_RH_C2R2 17
+#define POS_RH_C3R2 18
+#define POS_RH_C4R2 19
+#define POS_RH_C5R2 20
+#define POS_RH_C6R2 21
+#define POS_LH_C6R3 22
+#define POS_LH_C5R3 23
+#define POS_LH_C4R3 24
+#define POS_LH_C3R3 25
+#define POS_LH_C2R3 26
+#define POS_LH_C1R3 27
+#define POS_RH_C1R3 28
+#define POS_RH_C2R3 29
+#define POS_RH_C3R3 30
+#define POS_RH_C4R3 31
+#define POS_RH_C5R3 32
+#define POS_RH_C6R3 33
+#define POS_LH_C6R4 34
+#define POS_LH_C5R4 35
+#define POS_LH_C4R4 36
+#define POS_LH_C3R4 37
+#define POS_LH_C2R4 38
+#define POS_LH_C1R4 39
+#define POS_RH_C1R4 40
+#define POS_RH_C2R4 41
+#define POS_RH_C3R4 42
+#define POS_RH_C4R4 43
+#define POS_RH_C5R4 44
+#define POS_RH_C6R4 45
+#define POS_LH_C6R5 46
+#define POS_LH_C5R5 47
+#define POS_LH_C4R5 48
+#define POS_LH_C3R5 49
+#define POS_LH_C2R5 50
+#define POS_LH_C1R5 51
 #define POS_LH_T1 52
 #define POS_LH_T2 53
 #define POS_LH_T3 54
+#define POS_RH_T3 55
+#define POS_RH_T2 56
+#define POS_RH_T1 57
+#define POS_RH_C1R5 58
+#define POS_RH_C2R5 59
+#define POS_RH_C3R5 60
+#define POS_RH_C4R5 61
+#define POS_RH_C5R5 62
+#define POS_RH_C6R5 63
+#define POS_LH_C6R6 64
+#define POS_LH_C5R6 65
+#define POS_LH_C4R6 66
+#define POS_LH_C3R6 67
+#define POS_LH_C2R6 68
 #define POS_LH_T4 69
 #define POS_LH_T5 70
 #define POS_LH_T6 71
-#define POS_LH_C1R2 15
-#define POS_LH_C1R3 27
-#define POS_LH_C1R4 39
-#define POS_LH_C1R5 51
-#define POS_LH_C2R1 4
-#define POS_LH_C2R2 14
-#define POS_LH_C2R3 26
-#define POS_LH_C2R4 38
-#define POS_LH_C2R5 50
-#define POS_LH_C2R6 68
-#define POS_LH_C3R1 3
-#define POS_LH_C3R2 13
-#define POS_LH_C3R3 25
-#define POS_LH_C3R4 37
-#define POS_LH_C3R5 49
-#define POS_LH_C3R6 67
-#define POS_LH_C4R1 2
-#define POS_LH_C4R2 12
-#define POS_LH_C4R3 24
-#define POS_LH_C4R4 36
-#define POS_LH_C4R5 48
-#define POS_LH_C4R6 66
-#define POS_LH_C5R1 1
-#define POS_LH_C5R2 11
-#define POS_LH_C5R3 23
-#define POS_LH_C5R4 35
-#define POS_LH_C5R5 47
-#define POS_LH_C5R6 65
-#define POS_LH_C6R1 0
-#define POS_LH_C6R2 10
-#define POS_LH_C6R3 22
-#define POS_LH_C6R4 34
-#define POS_LH_C6R5 46
-#define POS_LH_C6R6 64
-#define POS_RH_T1 57
-#define POS_RH_T2 56
-#define POS_RH_T3 55
-#define POS_RH_T4 74
-#define POS_RH_T5 73
 #define POS_RH_T6 72
-#define POS_RH_C1R2 16
-#define POS_RH_C1R3 28
-#define POS_RH_C1R4 40
-#define POS_RH_C1R5 58
-#define POS_RH_C2R1 5
-#define POS_RH_C2R2 17
-#define POS_RH_C2R3 29
-#define POS_RH_C2R4 41
-#define POS_RH_C2R5 59
+#define POS_RH_T5 73
+#define POS_RH_T4 74
 #define POS_RH_C2R6 75
-#define POS_RH_C3R1 6
-#define POS_RH_C3R2 18
-#define POS_RH_C3R3 30
-#define POS_RH_C3R4 42
-#define POS_RH_C3R5 60
 #define POS_RH_C3R6 76
-#define POS_RH_C4R1 7
-#define POS_RH_C4R2 19
-#define POS_RH_C4R3 31
-#define POS_RH_C4R4 43
-#define POS_RH_C4R5 61
 #define POS_RH_C4R6 77
-#define POS_RH_C5R1 8
-#define POS_RH_C5R2 20
-#define POS_RH_C5R3 32
-#define POS_RH_C5R4 44
-#define POS_RH_C5R5 62
 #define POS_RH_C5R6 78
-#define POS_RH_C6R1 9
-#define POS_RH_C6R2 21
-#define POS_RH_C6R3 33
-#define POS_RH_C6R4 45
-#define POS_RH_C6R5 63
 #define POS_RH_C6R6 79
+
 
 /* Custom Defined Behaviors */
 / {
 // NOTE: Use the many #define settings below to customize this keymap!
-#define OPERATING_SYSTEM 'L' // choose 'L'inux, 'M'acOS, or 'W'indows
+#define OPERATING_SYSTEM 'M' // choose 'L'inux, 'M'acOS, or 'W'indows
 #define DIFFICULTY_LEVEL  0  // 0:custom, 1:easy -> 5:hard (see below)
+
+#define TAPPING_RESOLUTION 280  // overrides difficulty level
+// These need to be adjusted since by default the repeat decay
+// is TAPPING_RESOLUTION + 150, which is too long when the
+// tapping resolution is set to 280.
+#define HOMEY_REPEAT_DECAY 280
+#define INDEX_REPEAT_DECAY 280
+#define PLAIN_REPEAT_DECAY 280
+#define THUMB_REPEAT_DECAY 280
+#define SPACE_REPEAT_DECAY 280
+
+// 40 ms is too low and causes the enter chord to fail often.
+#define COMBO_FIRING_DECAY 50
+
+#define THUMB_HOLDING_TIME 250
+#define THUMB_HOLDING_TYPE "balanced"
+
+#define INDEX_STREAK_DECAY 150  // lower decay for index finger for shift
+#define INDEX_HOLDING_TIME 180
+#define INDEX_HOLDING_TYPE "tap-preferred"
+
+#define HOMEY_STREAK_DECAY 180  // how long you need to wait after typing to use home row mods
+#define HOMEY_HOLDING_TYPE "balanced"
+
 #define ENFORCE_BILATERAL    // cancels single-handed home row mod+tap
-//#define SHIFT_FORGIVENESS  // requires 24.08-beta1 or newer firmware
 #define WORLD_USE_COMPOSE    // use native Compose in place of Unicode
+//#define SHIFT_FORGIVENESS  // requires 24.08-beta1 or newer firmware
+
 // TIP: Add more setting overrides here instead of editing them below.
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1207,12 +1269,13 @@ combos {
     #ifndef COMBO_FIRING_DECAY
     #define COMBO_FIRING_DECAY 50
     #endif
+    // C1R5+C2R6
     #ifdef LAYER_Gaming
     combo_gaming_layer_toggle {
-        timeout-ms = <COMBO_FIRING_DECAY>;
-        key-positions = <POS_LH_T3 POS_LH_T6>;
-        bindings = <&tog LAYER_Gaming>;
-        layers = <0 LAYER_Gaming>;
+      timeout-ms = <COMBO_FIRING_DECAY>;
+      key-positions = <POS_LH_C1R5 POS_LH_C2R6>;
+      bindings = <&tog LAYER_Gaming>;
+      layers = <0 1 2 LAYER_Gaming>;
     };
     #endif
     #ifdef _A_TAB
@@ -1272,6 +1335,69 @@ combos {
         bindings = <&caps_word>;
         layers = <0 1 2 3 4 5 6 7 8>;
     };
+
+    combo_backspace_word_mac_linux {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T4 POS_LH_C4R4>;
+        bindings = <&kp LA(BSPC)>;
+        layers = <0 1 2 3 4 5 6 7 8>;
+    };
+    
+
+    #ifdef LAYER_LeftCallum
+    // TODO: Generate these with the correct key positions
+    lh_callum_index {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T6 POS_LH_C2R4>;
+        bindings = <&callum_combo LAYER_LeftCallum LSFT>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    lh_callum_middy {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T6 POS_LH_C3R4>;
+        bindings = <&callum_combo LAYER_LeftCallum LGUI>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    lh_callum_ring {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T6 POS_LH_C4R4>;
+        bindings = <&callum_combo LAYER_LeftCallum LALT>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    lh_callum_pinkie {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_LH_T6 POS_LH_C5R4>;
+        bindings = <&callum_combo LAYER_LeftCallum LCTRL>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    #endif
+    #ifdef LAYER_RightCallum
+    // TODO: Generate these with the correct key positions
+    rh_callum_index {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_RH_T6 POS_RH_C2R4>;
+        bindings = <&callum_combo LAYER_RightCallum RSFT>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    rh_callum_middy {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_RH_T6 POS_RH_C3R4>;
+        bindings = <&callum_combo LAYER_RightCallum LGUI>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    rh_callum_ring {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_RH_T6 POS_RH_C4R4>;
+        bindings = <&callum_combo LAYER_RightCallum LALT>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    rh_callum_pinkie {
+        timeout-ms = <COMBO_FIRING_DECAY>;
+        key-positions = <POS_RH_T6 POS_RH_C5R4>;
+        bindings = <&callum_combo LAYER_RightCallum LCTRL>;
+        layers = <LAYER_ColemakCallum>;
+    };
+    #endif
 
 };
 
@@ -4572,6 +4698,26 @@ behaviors {
 };
 
 macros {
+    //
+    // Combo triggers for Callum style home row mods.
+    //
+    callum_combo: callum_combo {
+        compatible = "zmk,behavior-macro-two-param";
+        wait-ms = <0>;
+        tap-ms = <0>;
+        #binding-cells = <2>;
+        bindings
+            = <&macro_param_1to1>
+            , <&macro_press &mo MACRO_PLACEHOLDER>
+            , <&macro_param_2to1>
+            , <&macro_press &kp MACRO_PLACEHOLDER>
+            , <&macro_pause_for_release>
+            , <&macro_param_2to1>
+            , <&macro_release &kp MACRO_PLACEHOLDER>
+            , <&macro_param_1to1>
+            , <&macro_release &mo MACRO_PLACEHOLDER>
+            ;
+    };
 
     //
     // Linux Magic System Request Key - hold this down and type REISUB
@@ -10735,6 +10881,9 @@ UNICODE_MORPH_MODS
 
 };
 
+/* Generated input processors */
+
+
 /* Automatically generated macro definitions */
 / {
     macros {
@@ -10745,22 +10894,74 @@ UNICODE_MORPH_MODS
 /* Automatically generated behavior definitions */
 / {
     behaviors {
-    
+
+
     };
 };
 
 /* Automatically generated combos definitions */
-/ {
-    combos {
-    compatible = "zmk,combos";
-    };
-};
+
 
 /* Automatically generated keymap */
 / {
     keymap {
         compatible = "zmk,keymap";
 
+
+        layer_Colemak {
+            bindings = <
+                       &kp F1                         &kp F2                         &kp F3                         &kp F4                         &kp F5                                                                                                                                                                              &kp F6                          &kp F7                          &kp F8                          &kp F9                       &kp F10
+                    &kp EQUAL                         &kp N1                         &kp N2                         &kp N3                         &kp N4  &kp N5                                                                                                                                    &kp N6                            &kp N7                          &kp N8                          &kp N9                          &kp N0                      &kp BSLH
+                    &kp GRAVE                          &kp Q  &LeftRing2 (W, LAYER_Colemak)                          &kp F                          &kp P   &kp G                                                                                                                                     &kp J                             &kp L                           &kp U  &RightRing2 (Y, LAYER_Colemak)                        &kp SEMI                     &kp MINUS
+                   &caps_word  &LeftPinky (A, LAYER_Colemak)  &LeftRing1 (R, LAYER_Colemak)  &LeftMiddy (S, LAYER_Colemak)  &LeftIndex (T, LAYER_Colemak)   &kp D                                                                                                                                     &kp H    &RightIndex (N, LAYER_Colemak)  &RightMiddy (E, LAYER_Colemak)  &RightRing1 (I, LAYER_Colemak)  &RightPinky (O, LAYER_Colemak)                       &kp SQT
+ &sticky_key_modtap LSFT LSFT                          &kp Z                          &kp X                          &kp C                          &kp V   &kp B      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER   &kp K                             &kp M                       &kp COMMA                         &kp DOT                        &kp FSLH  &sticky_key_modtap RSFT RSFT
+         &magic LAYER_Magic 0                       &kp HOME                      &kp PG_UP                      &kp PG_DN         &thumb LAYER_Emoji END          &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE          &thumb_parang_left LAYER_World 0                        &kp LBKT                        &kp RBKT                   &parang_right          &magic LAYER_Magic 0
+            >;
+        };
+
+        layer_ColemakCallum {
+            bindings = <
+                       &kp F1    &kp F2     &kp F3     &kp F4                  &kp F5                                                                                                                                                                                                       &kp F6     &kp F7    &kp F8         &kp F9                       &kp F10
+                    &kp EQUAL    &kp N1     &kp N2     &kp N3                  &kp N4  &kp N5                                                                                                                                                             &kp N6                            &kp N7     &kp N8    &kp N9         &kp N0                      &kp BSLH
+                    &kp GRAVE     &kp Q      &kp W      &kp F                   &kp P   &kp G                                                                                                                                                              &kp J                             &kp L      &kp U     &kp Y       &kp SEMI                     &kp MINUS
+                   &caps_word     &kp A      &kp R      &kp S                   &kp T   &kp D                                                                                                                                                              &kp H                             &kp N      &kp E     &kp I          &kp O                       &kp SQT
+ &sticky_key_modtap LSFT LSFT     &kp Z      &kp X      &kp C                   &kp V   &kp B      &thumb LAYER_Function ESC                       &none                &lower                 &lower                   &none  &thumb LAYER_System ENTER   &kp K                             &kp M  &kp COMMA   &kp DOT       &kp FSLH  &sticky_key_modtap RSFT RSFT
+         &magic LAYER_Magic 0  &kp HOME  &kp PG_UP  &kp PG_DN  &thumb LAYER_Emoji END          &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE  &mo LAYER_LeftCallum  &mo LAYER_RightCallum  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE          &thumb_parang_left LAYER_World 0   &kp LBKT  &kp RBKT  &parang_right          &magic LAYER_Magic 0
+            >;
+        };
+
+        layer_ColemakDedicated {
+            bindings = <
+                       &kp F1              &kp F2              &kp F3              &kp F4              &kp F5                                                                                                                                                                               &kp F6               &kp F7               &kp F8               &kp F9                       &kp F10
+                    &kp EQUAL              &kp N1              &kp N2              &kp N3              &kp N4  &kp N5                                                                                                                                                  &kp N6               &kp N7               &kp N8               &kp N9               &kp N0                      &kp BSLH
+                    &kp GRAVE               &kp Q               &kp W               &kp F               &kp P   &kp G                                                                                                                                                   &kp J                &kp L                &kp U                &kp Y             &kp SEMI                     &kp MINUS
+                   &caps_word               &kp A               &kp R               &kp S               &kp T   &kp D                                                                                                                                                   &kp H                &kp N                &kp E                &kp I                &kp O                       &kp SQT
+ &sticky_key_modtap LSFT LSFT               &kp Z               &kp X               &kp C               &kp V   &kp B      &thumb LAYER_Function ESC        &mo LAYER_LeftCallum  &mo LAYER_Emoji  &mo LAYER_World   &mo LAYER_RightCallum  &thumb LAYER_System ENTER   &kp K                &kp M            &kp COMMA              &kp DOT             &kp FSLH  &sticky_key_modtap RSFT RSFT
+         &magic LAYER_Magic 0  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD          &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE           &lower           &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE          &kp RIGHT_INDEX_MOD  &kp RIGHT_MIDDY_MOD  &kp RIGHT_RING1_MOD  &kp RIGHT_PINKY_MOD          &magic LAYER_Magic 0
+            >;
+        };
+
+        layer_QWERTY {
+            bindings = <
+                       &kp F1                        &kp F2                        &kp F3                        &kp F4                        &kp F5                                                                                                                                                                                                            &kp F6                         &kp F7                         &kp F8                            &kp F9                       &kp F10
+                    &kp EQUAL                        &kp N1                        &kp N2                        &kp N3                        &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                         &kp N8                         &kp N9                            &kp N0                      &kp BSLH
+                    &kp GRAVE                         &kp Q  &LeftRing2 (W, LAYER_QWERTY)                         &kp E                         &kp R                  &kp T                                                                                                                                                    &kp Y                             &kp U                          &kp I  &RightRing2 (O, LAYER_QWERTY)                             &kp P                     &kp MINUS
+                   &caps_word  &LeftPinky (A, LAYER_QWERTY)  &LeftRing1 (S, LAYER_QWERTY)  &LeftMiddy (D, LAYER_QWERTY)  &LeftIndex (F, LAYER_QWERTY)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing H     &RightIndex (J, LAYER_QWERTY)  &RightMiddy (K, LAYER_QWERTY)  &RightRing1 (L, LAYER_QWERTY)  &RightPinky (SEMI, LAYER_QWERTY)                       &kp SQT
+ &sticky_key_modtap LSFT LSFT                         &kp Z                         &kp X                         &kp C                         &kp V                  &kp B      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp N                             &kp M                      &kp COMMA                        &kp DOT                          &kp FSLH  &sticky_key_modtap RSFT RSFT
+         &magic LAYER_Magic 0                      &kp HOME                     &kp PG_UP                     &kp PG_DN        &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                       &kp LBKT                       &kp RBKT                     &parang_right          &magic LAYER_Magic 0
+            >;
+        };
+
+        layer_ColemakDHm {
+            bindings = <
+                       &kp F1                            &kp F2                            &kp F3                            &kp F4                            &kp F5                                                                                                                                                                                                             &kp F6                             &kp F7                             &kp F8                             &kp F9                       &kp F10
+                    &kp EQUAL                            &kp N1                            &kp N2                            &kp N3                            &kp N4                 &kp N5                                                                                                                                                   &kp N6                             &kp N7                             &kp N8                             &kp N9                             &kp N0                      &kp BSLH
+                    &kp GRAVE                             &kp Q  &LeftRing2 (W, LAYER_ColemakDHm)                             &kp F                             &kp P                  &kp B                                                                                                                                                    &kp J                              &kp L                              &kp U  &RightRing2 (Y, LAYER_ColemakDHm)                           &kp SEMI                     &kp MINUS
+                   &caps_word  &LeftPinky (A, LAYER_ColemakDHm)  &LeftRing1 (R, LAYER_ColemakDHm)  &LeftMiddy (S, LAYER_ColemakDHm)  &LeftIndex (T, LAYER_ColemakDHm)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing M  &RightIndex (N, LAYER_ColemakDHm)  &RightMiddy (E, LAYER_ColemakDHm)  &RightRing1 (I, LAYER_ColemakDHm)  &RightPinky (O, LAYER_ColemakDHm)                       &kp SQT
+ &sticky_key_modtap LSFT LSFT                             &kp Z                             &kp X                             &kp C                             &kp D                  &kp V      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp K                              &kp H                          &kp COMMA                            &kp DOT                           &kp FSLH  &sticky_key_modtap RSFT RSFT
+         &magic LAYER_Magic 0                          &kp HOME                         &kp PG_UP                         &kp PG_DN            &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                          &thumb_parang_left LAYER_World 0                           &kp LBKT                           &kp RBKT                      &parang_right          &magic LAYER_Magic 0
+            >;
+        };
 
         layer_Engrammer {
             bindings = <
@@ -10784,80 +10985,25 @@ UNICODE_MORPH_MODS
             >;
         };
 
-        layer_Dvorak {
+        layer_LeftCallum {
             bindings = <
-                       &kp F1                        &kp F2                            &kp F3                        &kp F4                        &kp F5                                                                                                                                                                                                            &kp F6                         &kp F7                         &kp F8                         &kp F9                       &kp F10
-                    &kp EQUAL                        &kp N1                            &kp N2                        &kp N3                        &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                         &kp N8                         &kp N9                         &kp N0                      &kp BSLH
-                    &kp GRAVE                       &kp SQT  &LeftRing2 (COMMA, LAYER_Dvorak)                       &kp DOT                         &kp P                  &kp Y                                                                                                                                                    &kp F                             &kp G                          &kp C  &RightRing2 (R, LAYER_Dvorak)                          &kp L                     &kp SLASH
-                   &caps_word  &LeftPinky (A, LAYER_Dvorak)      &LeftRing1 (O, LAYER_Dvorak)  &LeftMiddy (E, LAYER_Dvorak)  &LeftIndex (U, LAYER_Dvorak)  &plain LAYER_Typing I                                                                                                                                    &plain LAYER_Typing D     &RightIndex (H, LAYER_Dvorak)  &RightMiddy (T, LAYER_Dvorak)  &RightRing1 (N, LAYER_Dvorak)  &RightPinky (S, LAYER_Dvorak)                     &kp MINUS
- &sticky_key_modtap LSFT LSFT                      &kp SEMI                             &kp Q                         &kp J                         &kp K                  &kp X      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp B                             &kp M                          &kp W                          &kp V                          &kp Z  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                      &kp HOME                         &kp PG_UP                     &kp PG_DN        &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                       &kp LBKT                       &kp RBKT                  &parang_right          &magic LAYER_Magic 0
+  &none               &none               &none               &none               &none                                                                  &trans  &trans  &trans  &trans  &trans
+  &none               &none               &none               &none               &none   &none                                                  &trans  &trans  &trans  &trans  &trans  &trans
+  &none               &none  &kp LEFT_RING2_MOD               &none               &none   &none                                                  &trans  &trans  &trans  &trans  &trans  &trans
+  &none  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD   &none                                                  &trans  &trans  &trans  &trans  &trans  &trans
+  &none               &none               &none               &none               &none   &none   &none   &none   &none  &trans   &none  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+  &none               &none               &none               &none               &none           &none   &none   &none  &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans
             >;
         };
 
-        layer_ColemakDHm {
+        layer_RightCallum {
             bindings = <
-                       &kp F1                            &kp F2                            &kp F3                            &kp F4                            &kp F5                                                                                                                                                                                                             &kp F6                             &kp F7                             &kp F8                             &kp F9                       &kp F10
-                    &kp EQUAL                            &kp N1                            &kp N2                            &kp N3                            &kp N4                 &kp N5                                                                                                                                                   &kp N6                             &kp N7                             &kp N8                             &kp N9                             &kp N0                      &kp BSLH
-                    &kp GRAVE                             &kp Q  &LeftRing2 (W, LAYER_ColemakDHm)                             &kp F                             &kp P                  &kp B                                                                                                                                                    &kp J                              &kp L                              &kp U  &RightRing2 (Y, LAYER_ColemakDHm)                           &kp SEMI                     &kp MINUS
-                   &caps_word  &LeftPinky (A, LAYER_ColemakDHm)  &LeftRing1 (R, LAYER_ColemakDHm)  &LeftMiddy (S, LAYER_ColemakDHm)  &LeftIndex (T, LAYER_ColemakDHm)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing M  &RightIndex (N, LAYER_ColemakDHm)  &RightMiddy (E, LAYER_ColemakDHm)  &RightRing1 (I, LAYER_ColemakDHm)  &RightPinky (O, LAYER_ColemakDHm)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                             &kp Z                             &kp X                             &kp C                             &kp D                  &kp V      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp K                              &kp H                          &kp COMMA                            &kp DOT                           &kp FSLH  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                          &kp HOME                         &kp PG_UP                         &kp PG_DN            &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                          &thumb_parang_left LAYER_World 0                           &kp LBKT                           &kp RBKT                      &parang_right          &magic LAYER_Magic 0
-            >;
-        };
-
-        layer_Colemak {
-            bindings = <
-                       &kp F1                         &kp F2                         &kp F3                         &kp F4                         &kp F5                                                                                                                                                                                                            &kp F6                          &kp F7                          &kp F8                          &kp F9                       &kp F10
-                    &kp EQUAL                         &kp N1                         &kp N2                         &kp N3                         &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                          &kp N8                          &kp N9                          &kp N0                      &kp BSLH
-                    &kp GRAVE                          &kp Q  &LeftRing2 (W, LAYER_Colemak)                          &kp F                          &kp P                  &kp G                                                                                                                                                    &kp J                             &kp L                           &kp U  &RightRing2 (Y, LAYER_Colemak)                        &kp SEMI                     &kp MINUS
-                   &caps_word  &LeftPinky (A, LAYER_Colemak)  &LeftRing1 (R, LAYER_Colemak)  &LeftMiddy (S, LAYER_Colemak)  &LeftIndex (T, LAYER_Colemak)  &plain LAYER_Typing D                                                                                                                                    &plain LAYER_Typing H    &RightIndex (N, LAYER_Colemak)  &RightMiddy (E, LAYER_Colemak)  &RightRing1 (I, LAYER_Colemak)  &RightPinky (O, LAYER_Colemak)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                          &kp Z                          &kp X                          &kp C                          &kp V                  &kp B      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp K                             &kp M                       &kp COMMA                         &kp DOT                        &kp FSLH  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                       &kp HOME                      &kp PG_UP                      &kp PG_DN         &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                        &kp LBKT                        &kp RBKT                   &parang_right          &magic LAYER_Magic 0
-            >;
-        };
-
-        layer_QWERTY {
-            bindings = <
-                       &kp F1                        &kp F2                        &kp F3                        &kp F4                        &kp F5                                                                                                                                                                                                            &kp F6                         &kp F7                         &kp F8                            &kp F9                       &kp F10
-                    &kp EQUAL                        &kp N1                        &kp N2                        &kp N3                        &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                         &kp N8                         &kp N9                            &kp N0                      &kp BSLH
-                    &kp GRAVE                         &kp Q  &LeftRing2 (W, LAYER_QWERTY)                         &kp E                         &kp R                  &kp T                                                                                                                                                    &kp Y                             &kp U                          &kp I  &RightRing2 (O, LAYER_QWERTY)                             &kp P                     &kp MINUS
-                   &caps_word  &LeftPinky (A, LAYER_QWERTY)  &LeftRing1 (S, LAYER_QWERTY)  &LeftMiddy (D, LAYER_QWERTY)  &LeftIndex (F, LAYER_QWERTY)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing H     &RightIndex (J, LAYER_QWERTY)  &RightMiddy (K, LAYER_QWERTY)  &RightRing1 (L, LAYER_QWERTY)  &RightPinky (SEMI, LAYER_QWERTY)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                         &kp Z                         &kp X                         &kp C                         &kp V                  &kp B      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp N                             &kp M                      &kp COMMA                        &kp DOT                          &kp FSLH  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                      &kp HOME                     &kp PG_UP                     &kp PG_DN        &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                       &kp LBKT                       &kp RBKT                     &parang_right          &magic LAYER_Magic 0
-            >;
-        };
-
-        layer_Norman {
-            bindings = <
-                       &kp F1                        &kp F2                        &kp F3                        &kp F4                        &kp F5                                                                                                                                                                                                            &kp F6                         &kp F7                         &kp F8                         &kp F9                       &kp F10
-                    &kp EQUAL                        &kp N1                        &kp N2                        &kp N3                        &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                         &kp N8                         &kp N9                         &kp N0                      &kp BSLH
-                    &kp GRAVE                         &kp Q  &LeftRing2 (W, LAYER_Norman)                         &kp D                         &kp F                  &kp K                                                                                                                                                    &kp J                             &kp U                          &kp R  &RightRing2 (L, LAYER_Norman)                       &kp SEMI                     &kp MINUS
-                   &caps_word  &LeftPinky (A, LAYER_Norman)  &LeftRing1 (S, LAYER_Norman)  &LeftMiddy (E, LAYER_Norman)  &LeftIndex (T, LAYER_Norman)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing Y     &RightIndex (N, LAYER_Norman)  &RightMiddy (I, LAYER_Norman)  &RightRing1 (O, LAYER_Norman)  &RightPinky (H, LAYER_Norman)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                         &kp Z                         &kp X                         &kp C                         &kp V                  &kp B      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp P                             &kp M                      &kp COMMA                        &kp DOT                       &kp FSLH  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                      &kp HOME                     &kp PG_UP                     &kp PG_DN        &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                       &kp LBKT                       &kp RBKT                  &parang_right          &magic LAYER_Magic 0
-            >;
-        };
-
-        layer_Workman {
-            bindings = <
-                       &kp F1                         &kp F2                         &kp F3                         &kp F4                         &kp F5                                                                                                                                                                                                            &kp F6                          &kp F7                          &kp F8                          &kp F9                       &kp F10
-                    &kp EQUAL                         &kp N1                         &kp N2                         &kp N3                         &kp N4                 &kp N5                                                                                                                                                   &kp N6                            &kp N7                          &kp N8                          &kp N9                          &kp N0                      &kp BSLH
-                    &kp GRAVE                          &kp Q  &LeftRing2 (D, LAYER_Workman)                          &kp R                          &kp W                  &kp B                                                                                                                                                    &kp J                             &kp F                           &kp U  &RightRing2 (P, LAYER_Workman)                        &kp SEMI                     &kp MINUS
-                   &caps_word  &LeftPinky (A, LAYER_Workman)  &LeftRing1 (S, LAYER_Workman)  &LeftMiddy (H, LAYER_Workman)  &LeftIndex (T, LAYER_Workman)  &plain LAYER_Typing G                                                                                                                                    &plain LAYER_Typing Y    &RightIndex (N, LAYER_Workman)  &RightMiddy (E, LAYER_Workman)  &RightRing1 (O, LAYER_Workman)  &RightPinky (I, LAYER_Workman)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                          &kp Z                          &kp X                          &kp M                          &kp C                  &kp V      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                  &kp K                             &kp L                       &kp COMMA                         &kp DOT                        &kp FSLH  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                       &kp HOME                      &kp PG_UP                      &kp PG_DN         &thumb LAYER_Emoji END                         &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                         &thumb_parang_left LAYER_World 0                        &kp LBKT                        &kp RBKT                   &parang_right          &magic LAYER_Magic 0
-            >;
-        };
-
-        layer_Halmak {
-            bindings = <
-                       &kp F1                        &kp F2                        &kp F3                        &kp F4                        &kp F5                                                                                                                                                                                                                  &kp F6                         &kp F7                         &kp F8                         &kp F9                       &kp F10
-                    &kp EQUAL                        &kp N1                        &kp N2                        &kp N3                        &kp N4                     &kp N5                                                                                                                                                     &kp N6                            &kp N7                         &kp N8                         &kp N9                         &kp N0                      &kp BSLH
-                    &kp GRAVE                         &kp W  &LeftRing2 (L, LAYER_Halmak)                         &kp R                         &kp B                      &kp Z                                                                                                                                                   &kp SEMI                             &kp Q                          &kp U  &RightRing2 (D, LAYER_Halmak)                          &kp J                     &kp MINUS
-                   &caps_word  &LeftPinky (S, LAYER_Halmak)  &LeftRing1 (H, LAYER_Halmak)  &LeftMiddy (N, LAYER_Halmak)  &LeftIndex (T, LAYER_Halmak)  &plain LAYER_Typing COMMA                                                                                                                                    &plain LAYER_Typing DOT     &RightIndex (A, LAYER_Halmak)  &RightMiddy (E, LAYER_Halmak)  &RightRing1 (O, LAYER_Halmak)  &RightPinky (I, LAYER_Halmak)                       &kp SQT
- &sticky_key_modtap LSFT LSFT                         &kp F                         &kp M                         &kp V                         &kp C                   &kp FSLH      &thumb LAYER_Function ESC                      &kp UP  &kp DOWN  &kp LEFT               &kp RIGHT  &thumb LAYER_System ENTER                    &kp G                             &kp P                          &kp X                          &kp K                          &kp Y  &sticky_key_modtap RSFT RSFT
-         &magic LAYER_Magic 0                      &kp HOME                     &kp PG_UP                     &kp PG_DN        &thumb LAYER_Emoji END                             &thumb LAYER_Cursor BACKSPACE  &thumb LAYER_Number DELETE    &lower    &lower  &thumb LAYER_Mouse TAB  &space LAYER_Symbol SPACE                           &thumb_parang_left LAYER_World 0                       &kp LBKT                       &kp RBKT                  &parang_right          &magic LAYER_Magic 0
+               &trans  &trans  &trans  &trans  &trans                                                                                &none                &none                &none                &none                 &none
+               &trans  &trans  &trans  &trans  &trans  &trans                                                   &none                &none                &none                &none                &none                 &none
+               &trans  &trans  &trans  &trans  &trans  &trans                                                   &none                &none                &none  &kp RIGHT_RING2_MOD                &none                 &none
+               &trans  &trans  &trans  &trans  &trans  &trans                                                   &none  &kp RIGHT_INDEX_MOD  &kp RIGHT_MIDDY_MOD  &kp RIGHT_RING1_MOD  &kp RIGHT_PINKY_MOD                 &none
+               &trans  &trans  &trans  &trans  &trans  &trans  &trans   &none  &trans   &none   &none   &none   &none                &none                &none                &none                &none                 &none
+ &magic LAYER_Magic 0  &trans  &trans  &trans  &trans          &trans  &trans  &trans   &none   &none   &none                        &none                &none                &none                &none  &magic LAYER_Magic 0
             >;
         };
 
@@ -10984,23 +11130,23 @@ UNICODE_MORPH_MODS
 
         layer_Cursor {
             bindings = <
-     &none               &none               &none               &none               &none                                                                                                                             &none           &none           &none      &none        &none
-   &kp ESC             &kp RET           &kp SPACE             &kp TAB             &kp DEL     &kp INS                                                                                                    &kp INS    &kp DEL         &kp TAB       &kp SPACE    &kp RET      &kp ESC
- &kp _C(K)           &sk LSHFT           &kp _REDO           &kp _UNDO            &kp BSPC    &kp _CUT                                                                                                   &kp _CUT   &kp BSPC       &kp _UNDO       &kp _REDO  &sk LSHFT    &kp _C(K)
- &kp _C(L)  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD   &kp _COPY                                                                                                  &kp _COPY   &kp LEFT          &kp UP        &kp DOWN  &kp RIGHT    &kp _C(L)
- &kp _C(J)           &kp _C(A)        &select_line        &select_word           &kp _FIND  &kp _PASTE  &mod_tab _A_TAB  &mod_tab _G_TAB            &kp TAB  &select_none  &extend_line  &extend_word  &kp _PASTE   &kp HOME       &kp PG_UP       &kp PG_DN    &kp END    &kp _C(J)
- &kp _C(H)      &kp _FIND_PREV        &extend_line        &extend_word      &kp _FIND_NEXT                        &none    &mod_tab LCTL  &tog LAYER_Cursor     &kp _C(A)  &select_line  &select_word              &kp _FIND  &kp _FIND_PREV  &kp _FIND_NEXT  &kp _C(H)  &kp LG(DOT)
+     &none               &none               &none               &none               &none                                                                                                                      &kp _C(K)  &kp _C(L)     &kp _C(J)      &none              &none
+   &kp ESC           &kp SPACE             &kp RET             &kp TAB             &kp DEL     &kp INS                                                                                                 &kp INS    &kp DEL    &kp TAB       &kp RET  &kp SPACE            &kp ESC
+     &none           &sk LSHFT           &kp _REDO           &kp _UNDO            &kp BSPC    &kp _CUT                                                                                                &kp _CUT   &kp BSPC  &kp _UNDO     &kp _REDO  &sk LSHFT          &kp LC(C)
+ &kp LC(W)  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD   &kp _COPY                                                                                               &kp _COPY   &kp LEFT     &kp UP      &kp DOWN  &kp RIGHT          &kp LC(A)
+     &none              &trans              &trans              &trans              &trans  &kp _PASTE  &mod_tab _A_TAB  &mod_tab _G_TAB       &select_word  &select_word  &extend_word    &kp RET  &kp _PASTE   &kp HOME  &kp PG_UP     &kp PG_DN    &kp END          &kp LC(L)
+     &none      &kp _FIND_PREV        &extend_line        &extend_word      &kp _FIND_NEXT                        &none    &mod_tab LCTL  &tog LAYER_Cursor     &kp _C(A)       &kp TAB  &kp SPACE                  &none  &kp LC(O)  &kp LC(RBKT)  &kp LC(I)  &kp LG(LC(SPACE))
             >;
         };
 
         layer_Number {
             bindings = <
-      &none               &none               &none               &none               &none                                                                                                                &none       &none       &none          &none      &none
-    &kp ESC             &kp RET           &kp SPACE             &kp TAB             &kp DEL  &kp INS                                                                                       &kp TILDE   &kp CARET    &kp HASH    &kp DLLR       &kp EXCL   &kp PIPE
-      &none           &sk LSHFT           &kp _REDO           &kp _UNDO            &kp BSPC    &kp A                                                                                       &kp PRCNT  &kp _KP_N7  &kp _KP_N8  &kp _KP_N9      &kp COLON      &kp K
- &kp KP_NUM  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD    &kp B                                                                                    &kp _KP_PLUS  &kp _KP_N4  &kp _KP_N5  &kp _KP_N6  &kp _KP_MINUS      &kp J
-      &none           &kp _C(A)        &select_line        &select_word           &kp UNDER    &kp C   &kp D   &kp E              &kp F         &kp LT       &kp GT  &kp _KP_EQUAL  &kp _KP_ASTERISK  &kp _KP_N1  &kp _KP_N2  &kp _KP_N3  &kp _KP_SLASH  &kp LS(G)
-      &none               &none        &extend_line        &extend_word               &kp X            &none   &none  &tog LAYER_Number  &kp _KP_COMMA  &kp _KP_DOT     &kp _KP_N0                        &trans      &trans      &trans         &trans     &kp AT
+      &none               &none               &none               &none               &none                                                                                                                &none       &none       &none          &none         &none
+    &kp ESC             &kp RET           &kp SPACE             &kp TAB             &kp DEL  &kp INS                                                                                   &kp LS(GRAVE)  &kp LS(N6)  &kp LS(N3)  &kp LS(N4)     &kp LS(N1)  &kp LS(BSLH)
+      &none           &sk LSHFT           &kp _REDO           &kp _UNDO            &kp BSPC    &kp A                                                                                      &kp LS(N5)  &kp _KP_N7  &kp _KP_N8  &kp _KP_N9   &kp LS(SEMI)         &kp K
+ &kp KP_NUM  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD    &kp B                                                                                    &kp _KP_PLUS  &kp _KP_N4  &kp _KP_N5  &kp _KP_N6  &kp _KP_MINUS         &kp J
+      &none           &kp _C(A)        &select_line        &select_word       &kp LS(MINUS)    &kp C   &kp D   &kp E              &kp F  &kp LS(COMMA)  &kp LS(DOT)  &kp _KP_EQUAL  &kp _KP_ASTERISK  &kp _KP_N1  &kp _KP_N2  &kp _KP_N3  &kp _KP_SLASH     &kp LS(G)
+      &none               &none        &extend_line        &extend_word               &kp X            &none   &none  &tog LAYER_Number  &kp _KP_COMMA  &kp _KP_DOT     &kp _KP_N0                        &trans      &trans      &trans         &trans    &kp LS(N2)
             >;
         };
 
@@ -11010,8 +11156,8 @@ UNICODE_MORPH_MODS
   &kp ESC             &kp RET           &kp SPACE             &kp TAB             &kp DEL  &kp INS                                                                               &kp C_MEDIA_HOME     &kp C_PLAY    &kp C_PREV    &kp C_NEXT     &kp C_STOP     &kp C_EJECT
     &none           &sk LSHFT           &kp _REDO           &kp _UNDO            &kp BSPC    &none                                                                                     &kp K_CALC         &kp F7        &kp F8        &kp F9        &kp F10         &kp F13
  &kp CAPS  &kp LEFT_PINKY_MOD  &kp LEFT_RING1_MOD  &kp LEFT_MIDDY_MOD  &kp LEFT_INDEX_MOD    &none                                                                                      &kp K_WWW         &kp F4        &kp F5        &kp F6        &kp F11         &kp F14
-    &none           &kp _C(A)        &select_line        &select_word               &none    &none   &none   &none                &none  &kp C_PREV    &kp C_NEXT      &kp C_PP    &kp C_AL_FILES         &kp F1        &kp F2        &kp F3        &kp F12         &kp F15
-    &none               &none        &extend_line        &extend_word               &none            &none   &none  &tog LAYER_Function  &kp C_MUTE  &kp C_VOL_DN  &kp C_VOL_UP                    &kp C_BRI_MAX  &kp C_BRI_UP  &kp C_BRI_DN  &kp C_BRI_MIN  &kp C_BRI_AUTO
+    &none           &kp _C(A)        &select_line        &select_word               &none    &none   &none   &none                &none    &kp C_PREV    &kp C_NEXT    &kp C_PP    &kp C_AL_FILES         &kp F1        &kp F2        &kp F3        &kp F12         &kp F15
+    &none               &none        &extend_line        &extend_word               &none            &none   &none  &tog LAYER_Function  &kp C_VOL_DN  &kp C_VOL_UP  &kp C_MUTE                    &kp C_BRI_MAX  &kp C_BRI_UP  &kp C_BRI_DN  &kp C_BRI_MIN  &kp C_BRI_AUTO
             >;
         };
 
@@ -11028,12 +11174,12 @@ UNICODE_MORPH_MODS
 
         layer_Symbol {
             bindings = <
-     &none      &none      &none      &none     &none                                                                                                        &none                &none                &none                &none   &none
-     &none  &kp GRAVE   &kp LPAR   &kp RPAR  &kp SEMI  &kp COMMA                                                                        &none                &none                &none                &none                &none   &none
-  &kp EXCL   &kp LBRC    &kp SQT    &kp DQT  &kp RBRC  &kp QMARK                                                                     &kp SEMI  &kp RIGHT_INDEX_MOD  &kp RIGHT_MIDDY_MOD  &kp RIGHT_RING1_MOD  &kp RIGHT_PINKY_MOD   &none
-  &kp HASH  &kp CARET  &kp EQUAL  &kp UNDER  &kp DLLR   &kp STAR                                                                      &kp DOT             &kp BSPC              &kp TAB            &kp SPACE              &kp RET   &none
- &kp TILDE     &kp LT   &kp PIPE  &kp MINUS    &kp GT   &kp FSLH   &kp BSLH    &kp DOT  &kp STAR              &none   &none   &none  &kp FSLH              &kp DEL          &kp LS(TAB)                &none                &none   &none
-    &kp AT   &kp AMPS   &kp LBKT   &kp RBKT  &kp PLUS             &kp PRCNT  &kp COLON  &kp SEMI  &tog LAYER_Symbol   &none   &none                         &trans               &trans               &trans               &trans   &none
+         &none          &none         &none                 &none          &none                                                                                                                 &none                &none                &none                &none      &none
+         &none      &kp GRAVE    &kp LS(N9)            &kp LS(N0)       &kp SEMI     &kp COMMA                                                                              &none                &none                &none                &none                &none      &none
+    &kp LS(N3)   &kp LS(LBKT)       &kp SQT  &kp LS(SINGLE_QUOTE)   &kp LS(RBKT)  &kp LS(FSLH)                                                                           &kp SEMI  &kp RIGHT_INDEX_MOD  &kp RIGHT_MIDDY_MOD  &kp RIGHT_RING1_MOD  &kp RIGHT_PINKY_MOD  &kp LC(C)
+    &kp LS(N1)     &kp LS(N6)     &kp EQUAL         &kp LS(MINUS)     &kp LS(N4)    &kp LS(N8)                                                                            &kp DOT             &kp BSPC              &kp TAB              &kp RET            &kp SPACE  &kp LC(A)
+ &kp LS(GRAVE)  &kp LS(COMMA)  &kp LS(BSLH)             &kp MINUS    &kp LS(DOT)      &kp FSLH      &kp BSLH     &kp DOT  &kp LS(N8)              &none   &none   &none  &kp FSLH              &kp DEL          &kp LS(TAB)                &none                &none  &kp LC(L)
+    &kp LS(N2)     &kp LS(N7)      &kp LBKT              &kp RBKT  &kp LS(EQUAL)                &kp LS(SEMI)  &kp LS(N5)    &kp SEMI  &tog LAYER_Symbol   &none   &none                         &trans               &trans               &trans               &trans      &none
             >;
         };
 
@@ -11072,12 +11218,12 @@ UNICODE_MORPH_MODS
 
         layer_Gaming {
             bindings = <
-    &trans     &trans  &trans  &trans  &trans                                                                                             &trans  &trans     &trans   &trans    &trans
-    &trans     &trans  &trans  &trans  &trans   &trans                                                                            &trans  &trans  &trans     &trans   &trans    &trans
- &kp MINUS  &kp GRAVE   &kp B   &kp N   &kp M  &kp SQT                                                                             &kp B   &kp N   &kp M  &kp COMMA  &kp DOT  &kp FSLH
-     &kp T    &kp TAB   &kp Q   &kp W   &kp E    &kp R                                                                             &kp T   &kp Y   &kp U      &kp I    &kp O     &kp P
-     &kp G  &kp LSHFT   &kp A   &kp S   &kp D    &kp F    &kp ESC   &kp RET  &kp PAUSE_BREAK           &kp BSPC  &kp DEL  &trans   &kp G   &kp H   &kp J      &kp K    &kp L  &kp SEMI
-     &kp V  &kp LCTRL   &kp Z   &kp X   &kp C           &kp SPACE  &kp LALT         &kp LGUI  &tog LAYER_Gaming   &trans  &trans          &trans  &trans     &trans   &trans    &trans
+ &kp ESC      &kp P   &kp O   &kp N  &kp BSPC                                                                                   &kp F1     &kp F2    &kp F3     &kp F4     &kp F5
+   &kp M     &kp N6  &kp N7  &kp N8    &kp N9  &kp N0                                                                &kp F6     &kp F7     &kp F8    &kp F9    &kp F10    &kp F11
+   &kp I     &kp N1  &kp N2  &kp N3    &kp N4  &kp N5                                                                 &kp Y      &kp U      &kp I     &kp O      &kp P    &kp F12
+   &kp T    &kp TAB   &kp Q   &kp W     &kp E   &kp R                                                                 &kp H      &kp J      &kp K     &kp L   &kp SEMI    &kp SQT
+   &kp G  &kp LSHFT   &kp A   &kp S     &kp D   &kp F  &kp LSHFT   &kp LALT  &kp RET   &kp ESC    &kp UP    &kp RET   &kp N      &kp M  &kp COMMA   &kp DOT   &kp FSLH   &kp BSLH
+   &kp B  &kp LCTRL   &kp Z   &kp X     &kp C          &kp SPACE  &kp LCTRL    &kp V  &kp LEFT  &kp DOWN  &kp RIGHT          &kp MINUS   &kp LBKT  &kp RBKT  &kp EQUAL  &kp GRAVE
             >;
         };
 
@@ -11094,23 +11240,23 @@ UNICODE_MORPH_MODS
 
         layer_Lower {
             bindings = <
-         &kp C_BRI_DN  &kp C_BRI_UP      &kp C_PREV      &kp C_NEXT          &kp C_PP                                                                                                                                                    &kp C_MUTE  &kp C_VOL_DN  &kp C_VOL_UP            &none       &kp PAUSE_BREAK
-            &kp EQUAL         &none           &none           &none             &none   &kp HOME                                                                                                                         &kp LPAR        &kp KP_NUM  &kp KP_EQUAL  &kp KP_SLASH  &kp KP_MULTIPLY       &kp PRINTSCREEN
-              &kp TAB         &none           &none    &kp UP_ARROW             &none    &kp END                                                                                                                         &kp RPAR         &kp KP_N7     &kp KP_N8     &kp KP_N9     &kp KP_MINUS        &kp SCROLLLOCK
-              &kp ESC         &none  &kp LEFT_ARROW  &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp PG_UP                                                                                                                      &kp PERCENT         &kp KP_N4     &kp KP_N5     &kp KP_N6      &kp KP_PLUS            &kp KP_NUM
-            &kp GRAVE     &kp K_APP           &none         &kp F11           &kp F12  &kp PG_DN  &tog LAYER_Function  &tog LAYER_Typing  &tog LAYER_Gaming  &tog LAYER_Gaming  &tog LAYER_Typing  &tog LAYER_System    &kp COMMA         &kp KP_N1     &kp KP_N2     &kp KP_N3     &kp KP_ENTER              &kp LALT
- &magic LAYER_Magic 0      &kp CAPS         &kp INS         &kp F11  &tog LAYER_Emoji               &tog LAYER_Cursor  &tog LAYER_Number   &tog LAYER_Lower   &tog LAYER_Lower   &tog LAYER_Mouse  &tog LAYER_Symbol               &tog LAYER_World     &kp KP_N0    &kp KP_DOT     &kp KP_ENTER  &magic LAYER_Magic 0
+         &kp C_BRI_DN  &kp C_BRI_UP      &kp C_PREV      &kp C_NEXT          &kp C_PP                                                                                                                                                   &kp C_MUTE  &kp C_VOL_DN  &kp C_VOL_UP            &none       &kp PAUSE_BREAK
+            &kp EQUAL         &none           &none           &none             &none   &kp HOME                                                                                                                      &kp LS(N9)        &kp KP_NUM  &kp KP_EQUAL  &kp KP_SLASH  &kp KP_MULTIPLY       &kp PRINTSCREEN
+              &kp TAB         &none           &none    &kp UP_ARROW             &none    &kp END                                                                                                                      &kp LS(N0)         &kp KP_N7     &kp KP_N8     &kp KP_N9     &kp KP_MINUS        &kp SCROLLLOCK
+              &kp ESC         &none  &kp LEFT_ARROW  &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp PG_UP                                                                                                                      &kp LS(N5)         &kp KP_N4     &kp KP_N5     &kp KP_N6      &kp KP_PLUS            &kp KP_NUM
+            &kp GRAVE     &kp K_APP           &none         &kp F11           &kp F12  &kp PG_DN  &tog LAYER_Function  &tog LAYER_Typing  &tog LAYER_Gaming  &tog LAYER_Gaming  &tog LAYER_Typing  &tog LAYER_System   &kp COMMA         &kp KP_N1     &kp KP_N2     &kp KP_N3     &kp KP_ENTER              &kp LALT
+ &magic LAYER_Magic 0      &kp CAPS         &kp INS         &kp F11  &tog LAYER_Emoji               &tog LAYER_Cursor  &tog LAYER_Number   &tog LAYER_Lower   &tog LAYER_Lower   &tog LAYER_Mouse  &tog LAYER_Symbol              &tog LAYER_World     &kp KP_N0    &kp KP_DOT     &kp KP_ENTER  &magic LAYER_Magic 0
             >;
         };
 
         layer_Magic {
             bindings = <
-  &bt BT_CLR            &none            &none            &none            &none                                                                                  &none   &none   &none   &none  &bt BT_CLR_ALL
-       &to 0            &to 1            &to 2            &to 3            &to 4            &to 5                                                         &to 6   &to 7   &to 8   &none   &none           &none
-       &none  &rgb_ug RGB_SPI  &rgb_ug RGB_SAI  &rgb_ug RGB_HUI  &rgb_ug RGB_BRI  &rgb_ug RGB_TOG                                                         &none   &none   &none   &none   &none           &none
- &bootloader  &rgb_ug RGB_SPD  &rgb_ug RGB_SAD  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_EFF                                                         &none   &none   &none   &none   &none     &bootloader
-  &sys_reset            &none            &none            &none            &none            &none   &bt_2   &bt_3       &tog 29   &none   &none   &none   &none   &none   &none   &none   &none      &sys_reset
-       &none            &none            &none            &none            &none                    &bt_0   &bt_1  &out OUT_USB   &none   &none   &none           &none   &none   &none   &none           &none
+  &bt BT_CLR            &none            &none            &none            &none                                                                                        &none   &none   &none   &none  &bt BT_CLR_ALL
+       &to 0            &to 1            &to 2            &to 3            &to 4            &to 5                                                               &to 6   &none   &none   &none   &none           &none
+       &none  &rgb_ug RGB_SPI  &rgb_ug RGB_SAI  &rgb_ug RGB_HUI  &rgb_ug RGB_BRI  &rgb_ug RGB_TOG                                                               &none   &none   &none   &none   &none           &none
+ &bootloader  &rgb_ug RGB_SPD  &rgb_ug RGB_SAD  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_EFF                                                               &none   &none   &none   &none   &none     &bootloader
+  &sys_reset            &none            &none            &none            &none            &none   &bt_2   &bt_3  &tog LAYER_Factory   &none   &none   &none   &none   &none   &none   &none   &none      &sys_reset
+       &none            &none            &none            &none            &none                    &bt_0   &bt_1        &out OUT_USB   &none   &none   &none           &none   &none   &none   &none           &none
             >;
         };
 
